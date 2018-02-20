@@ -1,0 +1,92 @@
+---
+title: "Exercise 10.5"
+author: "Xiru Lyu"
+date: "2/20/2018"
+output: html_document
+---
+
+```{r,message=FALSE}
+# load in required package
+library(tidyverse)
+```
+
+
+## 1. How can you tell if an object is a tibble?
+
+```{r}
+# an object is a data frame
+head(mtcars)
+
+# an object is a tibble
+as.tibble(mtcars)
+
+```
+
+If an object is a tibble, we would clearly see the first row of the output would say "A tibble:" while a data frame doesn't having this kind of label. Moreover, the third row of the tibble object indicates the class for each column in the table, but a data frame object doesn't have such labeling.
+
+## 2. Compare and contrast the following operations on a `data.frame` and equivalent tibble. What is different? Why might the default data frame behaviours cause you frustration?
+
+```{r}
+# operate on a data.frame
+df <- data.frame(abc = 1, xyz = "a")
+df$x
+df[, "xyz"]
+df[, c("abc", "xyz")]
+```
+
+```{r}
+# operate on a 'tibble'
+tb <- tibble(abc=1,xyz='a')
+tb$x # this would generate a warning message since the column named 'x' doen't exist
+tb[['xyz']]
+tb %>% select('abc','xyz')
+```
+
+`df$x` refers to the column named 'x' in the data frame. Even though there is no column with such a column name, this command would return a column that contains 'x'. However, if we have a tibble object, the same command would generate a warning message because it cannot find a column that exactly matches this name. This characteristic for the data frame object will be troublesome when we have columns that have very similar names, so that when mistyped something in the column name, it would return us unexpected results. The same thing wouldn't happen for a tibble object since it only searches for columns with exact matching names. 
+
+## 3. If you have the name of a variable stored in an object, `e.g. var <- "mpg"`, how can you extract the reference variable from a tibble?
+
+There are several ways of doing so. For example, the name for the tibble is 'tb'. You can extract the reference variable using `tb$var`, `tb[[var]]`.
+
+## 4. Practice referring to non-syntactic names in the following data frame by:
+
+```{r}
+annoying <- tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+```
+
+### 1. Extracting the variable called `1`.
+
+```{r}
+annoying$`1`
+```
+
+### 2. Plotting a scatterplot of `1` vs `2`.
+```{r}
+ggplot(annoying, aes(x = `1`, y = `2`)) + geom_point()
+```
+
+### 3. Creating a new column called `3` which is `2` divided by `1`.
+
+```{r}
+annoying <- annoying %>% add_column(`3`=annoying$`2`/annoying$`1`)
+annoying
+```
+
+### 4. Renaming the columns to `one`, `two` and `three`.
+
+```{r}
+annoying <- annoying %>% rename('one'=`1`,'two'=`2`,'three'=`3`)
+annoying
+```
+
+
+## 5. What does `tibble::enframe()` do? When might you use it?
+
+`enframe()` takes a vector or a list and then convert it into a tibble. I can use the command if I have a vector or a list and turn it into a tibble. It would give me a tibble with a column "name" and another column "value", which stores values in my vector or list.
+
+## 6. What option controls how many additional column names are printed at the footer of a tibble?
+
+For example, if we want to print additional 5 columns , we can use `options(tibble.max_extra_cols = 5)`. If we want to show all columns, then we can use `options(tibble.width = Inf)`
