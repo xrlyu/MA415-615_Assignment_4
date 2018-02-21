@@ -2,7 +2,9 @@
 title: "Exercise 10.5"
 author: "Xiru Lyu"
 date: "2/20/2018"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r,message=FALSE}
