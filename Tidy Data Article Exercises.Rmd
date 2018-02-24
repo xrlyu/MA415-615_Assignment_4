@@ -1,0 +1,56 @@
+---
+title: "Tidy Data Article Exercises"
+author: "Xiru Lyu"
+date: "2/23/2018"
+output: pdf_document
+---
+
+
+```{r,message=FALSE}
+# Read required package
+library(tidyverse)
+```
+
+## 1. Table 4 & Table 6
+
+```{r}
+# Load table 4
+tab4 <- readRDS("./Data/tab4_raw.rds")
+
+# view first ten rows of table 4
+head(tab4,n=10)
+
+# convert the data frame to a tibble object 
+tab4 <- tab4 %>% as.tibble
+
+# tidy the data to be table 6
+tab6 <- tab4 %>% gather(key='income',value='freq',-religion) %>%
+  arrange(religion)
+
+# view first ten rows of table 6
+print(tab6,n=10)
+```
+
+## 2. Table 7 & Table 8
+
+```{r}
+# Load table 7
+tab7 <- readRDS("./Data/tab7_raw.rds")
+
+# view first 8 rows and 8 columns of table 7
+print(tab7[1:8,1:8])
+
+# convert the data frame to a tibble object
+tab7 <- as.tibble(tab7)
+
+# tidy the data to be table 8
+tab8 <- tab7 %>% gather(week,rank,wk1:wk76,na.rm=TRUE) %>% 
+  separate(week,into=c('wk','week'),sep=2) %>% 
+  mutate(date = as.Date(date.entered) + (as.numeric(week)-1)*7) %>% 
+  select(year,artist,track,time,date,week,rank) %>% 
+  arrange(artist,track)
+
+# view first 15 rows of table 8
+print(tab8,n=15)
+```
+                   
