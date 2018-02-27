@@ -4,7 +4,6 @@ author: "Xiru Lyu"
 date: "2/20/2018"
 output:
   pdf_document: default
-  html_document: default
 ---
 
 ```{r,message=FALSE}
@@ -88,6 +87,15 @@ annoying
 ## 5. What does `tibble::enframe()` do? When might you use it?
 
 `enframe()` takes a vector or a list and then convert it into a tibble. I can use the command if I have a vector or a list and turn it into a tibble. It would give me a tibble with a column "name" and another column "value", which stores values in my vector or list.
+
+
+```{r}
+# two examples
+enframe(1:3)
+
+item <- c(a=3,b=5)
+enframe(item)
+```
 
 ## 6. What option controls how many additional column names are printed at the footer of a tibble?
 
